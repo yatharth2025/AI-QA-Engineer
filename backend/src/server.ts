@@ -1,11 +1,7 @@
-import express from "express";
+import app from "./app.js";
 
-const app = express();
+const PORT = 5000;
 
-app.get("/", (req, res) => {
-    res.send("Hello AI QA Engineer 🚀");
-});
-
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });

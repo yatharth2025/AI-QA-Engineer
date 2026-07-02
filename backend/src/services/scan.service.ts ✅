@@ -1,0 +1,6 @@
+export const scanWebsiteService = () => {
+  return {
+    success: true,
+    message: "Website scanned successfully"
+  };
+};
