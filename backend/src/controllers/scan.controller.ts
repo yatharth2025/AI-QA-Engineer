@@ -1,10 +1,13 @@
 import type { Request, Response } from "express";
+import  { scanWebsiteService } from "../services/scan.service.js";
 
 export const scanWebsite = (
   req: Request,
   res: Response
 ) => {
-  res.json({
-    message: "Scan API Working"
-  });
+
+  const result = scanWebsiteService();
+
+  res.json(result);
+
 };
