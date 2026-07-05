@@ -1,13 +1,13 @@
 import type { Request, Response } from "express";
 import { scanWebsiteService } from "../services/scan.service.js";
 
-export const scanWebsite = (
+export const scanWebsite = async(
   req: Request,
   res: Response
 ) => {
   const url = req.body.url;
 
-  const result = scanWebsiteService(url);
+  const result =  await scanWebsiteService(url);
 
   res.json(result);
 };
