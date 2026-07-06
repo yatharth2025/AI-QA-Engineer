@@ -9,11 +9,20 @@ export const scanWebsiteService = async (url: string) => {
 
   await page.goto(url);
 
+  const title = await page.title();
+
+  await page.screenshot({
+    path: "screenshot.png",
+    fullPage: true,
+  });
+
   await browser.close();
 
   return {
     success: true,
     message: "Website scanned successfully",
     url,
+    title,
+    screenshot: "screenshot.png",
   };
 };
