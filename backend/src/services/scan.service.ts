@@ -15,13 +15,18 @@ export const scanWebsiteService = async (url: string) => {
   const buttonTexts = await page.locator("button").allTextContents();
 
   const links = await page.locator("a").count();
-
   const inputs = await page.locator("input").count();
-
   const images = await page.locator("img").count();
 
-  const imageSources = await page.locator("img").evaluateAll((imgs) =>
-    imgs.map((img) => (img as HTMLImageElement).src)
+  const imageDetails = await page.locator("img").evaluateAll((imgs) =>
+    imgs.map((img) => {
+      const image = img as HTMLImageElement;
+
+      return {
+        src: image.src,
+        loaded: image.complete && image.naturalWidth > 0,
+      };
+    })
   );
 
   await page.screenshot({
@@ -41,7 +46,7 @@ export const scanWebsiteService = async (url: string) => {
     links,
     inputs,
     images,
-    imageSources,
+    imageDetails,
     screenshot: "screenshot.png",
   };
 };
