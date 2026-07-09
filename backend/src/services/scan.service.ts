@@ -33,6 +33,29 @@ export const scanWebsiteService = async (url: string) => {
     }))
   );
 
+  // Check every link
+  const checkedLinks = [];
+
+  for (const link of linkDetails) {
+    try {
+      const response = await page.request.get(link.href);
+
+      checkedLinks.push({
+        text: link.text,
+        href: link.href,
+        status: response.status(),
+        working: response.ok(),
+      });
+    } catch {
+      checkedLinks.push({
+        text: link.text,
+        href: link.href,
+        status: "FAILED",
+        working: false,
+      });
+    }
+  }
+
   // Inputs
   const inputs = await page.locator("input").count();
 
@@ -73,7 +96,7 @@ export const scanWebsiteService = async (url: string) => {
     buttonTexts,
 
     links,
-    linkDetails,
+    checkedLinks,
 
     inputs,
     inputDetails,
