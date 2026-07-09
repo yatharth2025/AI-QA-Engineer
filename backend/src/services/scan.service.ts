@@ -33,29 +33,6 @@ export const scanWebsiteService = async (url: string) => {
     }))
   );
 
-  // Check every link
-  const checkedLinks = [];
-
-  for (const link of linkDetails) {
-    try {
-      const response = await page.request.get(link.href);
-
-      checkedLinks.push({
-        text: link.text,
-        href: link.href,
-        status: response.status(),
-        working: response.ok(),
-      });
-    } catch {
-      checkedLinks.push({
-        text: link.text,
-        href: link.href,
-        status: "FAILED",
-        working: false,
-      });
-    }
-  }
-
   // Inputs
   const inputs = await page.locator("input").count();
 
@@ -77,10 +54,16 @@ export const scanWebsiteService = async (url: string) => {
   const images = await page.locator("img").count();
 
   const imageDetails = await page.locator("img").evaluateAll((images) =>
-    images.map((img) => ({
-      src: (img as HTMLImageElement).src,
-      loaded: (img as HTMLImageElement).complete,
-    }))
+    images.map((img) => {
+      const image = img as HTMLImageElement;
+
+      return {
+        src: image.src,
+        loaded: image.complete && image.naturalWidth > 0,
+        alt: image.alt,
+        missingAlt: image.alt.trim() === "",
+      };
+    })
   );
 
   await browser.close();
@@ -96,7 +79,7 @@ export const scanWebsiteService = async (url: string) => {
     buttonTexts,
 
     links,
-    checkedLinks,
+    linkDetails,
 
     inputs,
     inputDetails,
