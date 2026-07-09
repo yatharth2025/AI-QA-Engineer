@@ -12,19 +12,35 @@ export const scanWebsiteService = async (url: string) => {
   const title = await page.title();
 
   const buttons = await page.locator("button").count();
-  const buttonTexts = await page.locator("button").allTextContents();
+
+  const buttonTexts = await page.locator("button").evaluateAll((buttons) =>
+    buttons.map((button) => button.textContent?.trim() || "")
+  );
 
   const links = await page.locator("a").count();
-  const inputs = await page.locator("input").count();
-  const images = await page.locator("img").count();
 
-  const imageDetails = await page.locator("img").evaluateAll((imgs) =>
-    imgs.map((img) => {
-      const image = img as HTMLImageElement;
+  const linkDetails = await page.locator("a").evaluateAll((links) =>
+    links.map((link) => {
+      const anchor = link as HTMLAnchorElement;
 
       return {
-        src: image.src,
-        loaded: image.complete && image.naturalWidth > 0,
+        text: anchor.innerText.trim(),
+        href: anchor.href,
+      };
+    })
+  );
+
+  const inputs = await page.locator("input").count();
+
+  const images = await page.locator("img").count();
+
+  const imageDetails = await page.locator("img").evaluateAll((images) =>
+    images.map((image) => {
+      const img = image as HTMLImageElement;
+
+      return {
+        src: img.src,
+        loaded: img.complete,
       };
     })
   );
@@ -44,6 +60,7 @@ export const scanWebsiteService = async (url: string) => {
     buttons,
     buttonTexts,
     links,
+    linkDetails,
     inputs,
     images,
     imageDetails,
