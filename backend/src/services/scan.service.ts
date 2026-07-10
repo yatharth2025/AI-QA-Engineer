@@ -1,5 +1,7 @@
 import { chromium } from "playwright";
+
 import { getButtonDetails } from "../scanners/button.scanner.js";
+import { getInputDetails } from "../scanners/input.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
 
@@ -18,10 +20,10 @@ export const scanWebsiteService = async (url: string) => {
         fullPage: true,
     });
 
-    // Buttons
+    // Button Scanner
     const { buttons, buttonTexts } = await getButtonDetails(page);
 
-    // Links
+    // Link Scanner (abhi service me hi hai)
     const links = await page.locator("a").count();
 
     const linkDetails = await page.locator("a").evaluateAll((elements) =>
@@ -31,10 +33,10 @@ export const scanWebsiteService = async (url: string) => {
         }))
     );
 
-    // Inputs
-    const inputs = await page.locator("input").count();
+    // Input Scanner
+    const { inputs, inputDetails } = await getInputDetails(page);
 
-    // Images
+    // Image Scanner (abhi service me hi hai)
     const images = await page.locator("img").count();
 
     const imageDetails = await page.locator("img").evaluateAll((elements) =>
@@ -49,6 +51,7 @@ export const scanWebsiteService = async (url: string) => {
     return {
         success: true,
         message: "Website scanned successfully",
+
         url,
         title,
 
@@ -59,10 +62,11 @@ export const scanWebsiteService = async (url: string) => {
         linkDetails,
 
         inputs,
+        inputDetails,
 
         images,
         imageDetails,
 
         screenshot: "screenshot.png",
     };
-};
+};git add .
