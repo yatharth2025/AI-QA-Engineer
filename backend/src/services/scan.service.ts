@@ -6,6 +6,7 @@ import { getLinkDetails } from "../scanners/link.scanner.js";
 import { getImageDetails } from "../scanners/image.scanner.js";
 import { getConsoleMessages } from "../scanners/console.scanner.js";
 import { getNetworkFailures } from "../scanners/network.scanner.js";
+import { getJavaScriptErrors } from "../scanners/javascript.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
 
@@ -20,6 +21,9 @@ export const scanWebsiteService = async (url: string) => {
 
     // Network Scanner
     const { failedRequests } = await getNetworkFailures(page);
+
+    // JavaScript Scanner
+    const { javascriptErrors } = await getJavaScriptErrors(page);
 
     await page.goto(url);
 
@@ -69,6 +73,8 @@ export const scanWebsiteService = async (url: string) => {
         consoleMessages,
 
         failedRequests,
+
+        javascriptErrors,
 
         screenshot: "screenshot.png",
 
