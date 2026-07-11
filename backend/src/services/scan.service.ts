@@ -5,6 +5,7 @@ import { getInputDetails } from "../scanners/input.scanner.js";
 import { getLinkDetails } from "../scanners/link.scanner.js";
 import { getImageDetails } from "../scanners/image.scanner.js";
 import { getConsoleMessages } from "../scanners/console.scanner.js";
+import { getNetworkFailures } from "../scanners/network.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
 
@@ -16,6 +17,9 @@ export const scanWebsiteService = async (url: string) => {
 
     // Console Scanner
     const { consoleMessages } = await getConsoleMessages(page);
+
+    // Network Scanner
+    const { failedRequests } = await getNetworkFailures(page);
 
     await page.goto(url);
 
@@ -37,26 +41,37 @@ export const scanWebsiteService = async (url: string) => {
     await browser.close();
 
     return {
+
         success: true,
+
         message: "Website scanned successfully",
 
         url,
+
         title,
 
         buttons,
+
         buttonTexts,
 
         links,
+
         linkDetails,
 
         inputs,
+
         inputDetails,
 
         images,
+
         imageDetails,
 
         consoleMessages,
 
+        failedRequests,
+
         screenshot: "screenshot.png",
+
     };
+
 };
