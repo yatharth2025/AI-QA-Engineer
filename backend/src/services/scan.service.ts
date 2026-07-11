@@ -2,6 +2,8 @@ import { chromium } from "playwright";
 
 import { getButtonDetails } from "../scanners/button.scanner.js";
 import { getInputDetails } from "../scanners/input.scanner.js";
+import { getLinkDetails } from "../scanners/link.scanner.js";
+import { getImageDetails } from "../scanners/image.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
 
@@ -23,28 +25,14 @@ export const scanWebsiteService = async (url: string) => {
     // Button Scanner
     const { buttons, buttonTexts } = await getButtonDetails(page);
 
-    // Link Scanner (abhi service me hi hai)
-    const links = await page.locator("a").count();
-
-    const linkDetails = await page.locator("a").evaluateAll((elements) =>
-        elements.map((link) => ({
-            text: link.textContent?.trim() || "",
-            href: (link as HTMLAnchorElement).href,
-        }))
-    );
+    // Link Scanner
+    const { links, linkDetails } = await getLinkDetails(page);
 
     // Input Scanner
     const { inputs, inputDetails } = await getInputDetails(page);
 
-    // Image Scanner (abhi service me hi hai)
-    const images = await page.locator("img").count();
-
-    const imageDetails = await page.locator("img").evaluateAll((elements) =>
-        elements.map((img) => ({
-            src: (img as HTMLImageElement).src,
-            loaded: (img as HTMLImageElement).complete,
-        }))
-    );
+    // Image Scanner
+    const { images, imageDetails } = await getImageDetails(page);
 
     await browser.close();
 
@@ -68,5 +56,5 @@ export const scanWebsiteService = async (url: string) => {
         imageDetails,
 
         screenshot: "screenshot.png",
-    };git add .
+    };
 };
