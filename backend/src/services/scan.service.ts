@@ -4,6 +4,7 @@ import { getButtonDetails } from "../scanners/button.scanner.js";
 import { getInputDetails } from "../scanners/input.scanner.js";
 import { getLinkDetails } from "../scanners/link.scanner.js";
 import { getImageDetails } from "../scanners/image.scanner.js";
+import { getConsoleMessages } from "../scanners/console.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
 
@@ -12,6 +13,9 @@ export const scanWebsiteService = async (url: string) => {
     });
 
     const page = await browser.newPage();
+
+    // Console Scanner
+    const { consoleMessages } = await getConsoleMessages(page);
 
     await page.goto(url);
 
@@ -22,16 +26,12 @@ export const scanWebsiteService = async (url: string) => {
         fullPage: true,
     });
 
-    // Button Scanner
     const { buttons, buttonTexts } = await getButtonDetails(page);
 
-    // Link Scanner
     const { links, linkDetails } = await getLinkDetails(page);
 
-    // Input Scanner
     const { inputs, inputDetails } = await getInputDetails(page);
 
-    // Image Scanner
     const { images, imageDetails } = await getImageDetails(page);
 
     await browser.close();
@@ -54,6 +54,8 @@ export const scanWebsiteService = async (url: string) => {
 
         images,
         imageDetails,
+
+        consoleMessages,
 
         screenshot: "screenshot.png",
     };
