@@ -7,6 +7,7 @@ import { getImageDetails } from "../scanners/image.scanner.js";
 import { getConsoleMessages } from "../scanners/console.scanner.js";
 import { getNetworkFailures } from "../scanners/network.scanner.js";
 import { getJavaScriptErrors } from "../scanners/javascript.scanner.js";
+import { getPerformanceMetrics } from "../scanners/performance.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
 
@@ -42,6 +43,8 @@ export const scanWebsiteService = async (url: string) => {
 
     const { images, imageDetails } = await getImageDetails(page);
 
+    const performance = await getPerformanceMetrics(page);
+
     await browser.close();
 
     return {
@@ -75,6 +78,8 @@ export const scanWebsiteService = async (url: string) => {
         failedRequests,
 
         javascriptErrors,
+
+        performance,
 
         screenshot: "screenshot.png",
 
