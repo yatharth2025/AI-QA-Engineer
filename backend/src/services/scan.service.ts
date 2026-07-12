@@ -1,88 +1,80 @@
 import { chromium } from "playwright";
 
 import { getButtonDetails } from "../scanners/button.scanner.js";
-import { getInputDetails } from "../scanners/input.scanner.js";
 import { getLinkDetails } from "../scanners/link.scanner.js";
 import { getImageDetails } from "../scanners/image.scanner.js";
-import { getConsoleMessages } from "../scanners/console.scanner.js";
-import { getNetworkFailures } from "../scanners/network.scanner.js";
+import { getInputDetails } from "../scanners/input.scanner.js";
 import { getJavaScriptErrors } from "../scanners/javascript.scanner.js";
+import { getConsoleErrors } from "../scanners/console.scanner.js";
+import { getNetworkErrors } from "../scanners/network.scanner.js";
 import { getPerformanceMetrics } from "../scanners/performance.scanner.js";
+import { getAccessibilityDetails } from "../scanners/accessibility.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
+  const browser = await chromium.launch({
+    headless: false,
+  });
 
-    const browser = await chromium.launch({
-        headless: false,
-    });
+  const page = await browser.newPage();
 
-    const page = await browser.newPage();
+  await page.goto(url);
 
-    // Console Scanner
-    const { consoleMessages } = await getConsoleMessages(page);
+  const title = await page.title();
 
-    // Network Scanner
-    const { failedRequests } = await getNetworkFailures(page);
+  await page.screenshot({
+    path: "screenshot.png",
+    fullPage: true,
+  });
 
-    // JavaScript Scanner
-    const { javascriptErrors } = await getJavaScriptErrors(page);
+  // Buttons
+  const buttonData = await getButtonDetails(page);
 
-    await page.goto(url);
+  // Links
+  const linkData = await getLinkDetails(page);
 
-    const title = await page.title();
+  // Images
+  const imageData = await getImageDetails(page);
 
-    await page.screenshot({
-        path: "screenshot.png",
-        fullPage: true,
-    });
+  // Inputs
+  const inputData = await getInputDetails(page);
 
-    const { buttons, buttonTexts } = await getButtonDetails(page);
+  // JavaScript Errors
+  const javascriptErrors = await getJavaScriptErrors(page);
 
-    const { links, linkDetails } = await getLinkDetails(page);
+  // Console Errors
+  const consoleErrors = await getConsoleErrors(page);
 
-    const { inputs, inputDetails } = await getInputDetails(page);
+  // Network Errors
+  const networkErrors = await getNetworkErrors(page);
 
-    const { images, imageDetails } = await getImageDetails(page);
+  // Performance
+  const performance = await getPerformanceMetrics(page);
 
-    const performance = await getPerformanceMetrics(page);
+  // Accessibility
+  const accessibility = await getAccessibilityDetails(page);
 
-    await browser.close();
+  await browser.close();
 
-    return {
+  return {
+    success: true,
+    message: "Website scanned successfully",
 
-        success: true,
+    url,
+    title,
 
-        message: "Website scanned successfully",
+    ...buttonData,
+    ...linkData,
+    ...imageData,
+    ...inputData,
 
-        url,
+    javascriptErrors,
+    consoleErrors,
+    networkErrors,
 
-        title,
+    performance,
 
-        buttons,
+    accessibility,
 
-        buttonTexts,
-
-        links,
-
-        linkDetails,
-
-        inputs,
-
-        inputDetails,
-
-        images,
-
-        imageDetails,
-
-        consoleMessages,
-
-        failedRequests,
-
-        javascriptErrors,
-
-        performance,
-
-        screenshot: "screenshot.png",
-
-    };
-
+    screenshot: "screenshot.png",
+  };
 };
