@@ -10,79 +10,104 @@ import { getNetworkErrors } from "../scanners/network.scanner.js";
 import { getPerformanceMetrics } from "../scanners/performance.scanner.js";
 import { getAccessibilityDetails } from "../scanners/accessibility.scanner.js";
 import { getSeoDetails } from "../scanners/seo.scanner.js";
+import { calculateWebsiteScore } from "../scanners/score.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
-  const browser = await chromium.launch({
-    headless: false,
-  });
 
-  const page = await browser.newPage();
+    const browser = await chromium.launch({
+        headless: false,
+    });
 
-  await page.goto(url);
+    const page = await browser.newPage();
 
-  const title = await page.title();
+    await page.goto(url);
 
-  await page.screenshot({
-    path: "screenshot.png",
-    fullPage: true,
-  });
+    const title = await page.title();
 
-  // Buttons
-  const buttonData = await getButtonDetails(page);
+    await page.screenshot({
+        path: "screenshot.png",
+        fullPage: true,
+    });
 
-  // Links
-  const linkData = await getLinkDetails(page);
+    // Buttons
+    const buttonData = await getButtonDetails(page);
 
-  // Images
-  const imageData = await getImageDetails(page);
+    // Links
+    const linkData = await getLinkDetails(page);
 
-  // Inputs
-  const inputData = await getInputDetails(page);
+    // Images
+    const imageData = await getImageDetails(page);
 
-  // JavaScript Errors
-  const javascriptErrors = await getJavaScriptErrors(page);
+    // Inputs
+    const inputData = await getInputDetails(page);
 
-  // Console Errors
-  const consoleErrors = await getConsoleErrors(page);
+    // JavaScript Errors
+    const javascriptErrors = await getJavaScriptErrors(page);
 
-  // Network Errors
-  const networkErrors = await getNetworkErrors(page);
+    // Console Errors
+    const consoleErrors = await getConsoleErrors(page);
 
-  // Performance
-  const performance = await getPerformanceMetrics(page);
+    // Network Errors
+    const networkErrors = await getNetworkErrors(page);
 
-  // Accessibility
-  const accessibility = await getAccessibilityDetails(page);
+    // Performance
+    const performance = await getPerformanceMetrics(page);
 
-  // SEO
-  const seo = await getSeoDetails(page);
+    // Accessibility
+    const accessibility = await getAccessibilityDetails(page);
 
-  await browser.close();
+    // SEO
+    const seo = await getSeoDetails(page);
 
-  return {
-    success: true,
-    message: "Website scanned successfully",
+    // Website Score
+    const score = calculateWebsiteScore({
 
-    url,
-    title,
+        consoleErrors,
 
-    ...buttonData,
-    ...linkData,
-    ...imageData,
-    ...inputData,
+        networkErrors,
 
-    javascriptErrors,
+        javascriptErrors,
 
-    consoleErrors,
+        accessibility,
 
-    networkErrors,
+    });
 
-    performance,
+    await browser.close();
 
-    accessibility,
+    return {
 
-    ...seo,
+        success: true,
 
-    screenshot: "screenshot.png",
-  };
+        message: "Website scanned successfully",
+
+        url,
+
+        title,
+
+        ...buttonData,
+
+        ...linkData,
+
+        ...imageData,
+
+        ...inputData,
+
+        javascriptErrors,
+
+        consoleErrors,
+
+        networkErrors,
+
+        performance,
+
+        accessibility,
+
+        ...seo,
+
+        score,
+
+        screenshot: "screenshot.png",
+
+    };
+
 };
