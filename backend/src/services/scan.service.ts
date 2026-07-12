@@ -9,6 +9,7 @@ import { getConsoleErrors } from "../scanners/console.scanner.js";
 import { getNetworkErrors } from "../scanners/network.scanner.js";
 import { getPerformanceMetrics } from "../scanners/performance.scanner.js";
 import { getAccessibilityDetails } from "../scanners/accessibility.scanner.js";
+import { getSeoDetails } from "../scanners/seo.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
   const browser = await chromium.launch({
@@ -53,6 +54,9 @@ export const scanWebsiteService = async (url: string) => {
   // Accessibility
   const accessibility = await getAccessibilityDetails(page);
 
+  // SEO
+  const seo = await getSeoDetails(page);
+
   await browser.close();
 
   return {
@@ -68,12 +72,16 @@ export const scanWebsiteService = async (url: string) => {
     ...inputData,
 
     javascriptErrors,
+
     consoleErrors,
+
     networkErrors,
 
     performance,
 
     accessibility,
+
+    ...seo,
 
     screenshot: "screenshot.png",
   };
