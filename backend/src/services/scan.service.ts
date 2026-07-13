@@ -11,6 +11,7 @@ import { getPerformanceMetrics } from "../scanners/performance.scanner.js";
 import { getAccessibilityDetails } from "../scanners/accessibility.scanner.js";
 import { getSeoDetails } from "../scanners/seo.scanner.js";
 import { calculateWebsiteScore } from "../scanners/score.scanner.js";
+import { getIssueSeverity } from "../scanners/severity.scanner.js";
 
 export const scanWebsiteService = async (url: string) => {
 
@@ -29,47 +30,38 @@ export const scanWebsiteService = async (url: string) => {
         fullPage: true,
     });
 
-    // Buttons
     const buttonData = await getButtonDetails(page);
 
-    // Links
     const linkData = await getLinkDetails(page);
 
-    // Images
     const imageData = await getImageDetails(page);
 
-    // Inputs
     const inputData = await getInputDetails(page);
 
-    // JavaScript Errors
     const javascriptErrors = await getJavaScriptErrors(page);
 
-    // Console Errors
     const consoleErrors = await getConsoleErrors(page);
 
-    // Network Errors
     const networkErrors = await getNetworkErrors(page);
 
-    // Performance
     const performance = await getPerformanceMetrics(page);
 
-    // Accessibility
     const accessibility = await getAccessibilityDetails(page);
 
-    // SEO
     const seo = await getSeoDetails(page);
 
-    // Website Score
     const score = calculateWebsiteScore({
-
         consoleErrors,
-
         networkErrors,
-
         javascriptErrors,
-
         accessibility,
+    });
 
+    const issues = getIssueSeverity({
+        consoleErrors,
+        networkErrors,
+        javascriptErrors,
+        accessibility,
     });
 
     await browser.close();
@@ -105,6 +97,8 @@ export const scanWebsiteService = async (url: string) => {
         ...seo,
 
         score,
+
+        issues,
 
         screenshot: "screenshot.png",
 
