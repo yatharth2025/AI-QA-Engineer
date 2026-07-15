@@ -10,26 +10,27 @@ const ai = new GoogleGenAI({
 export const generateAIReport = async (scanData: any) => {
 
     const prompt = `
-You are an expert QA Engineer.
+You are a Senior QA Engineer.
 
 Analyze the following website scan report.
-
-Return a professional report.
 
 Website Scan Report:
 
 ${JSON.stringify(scanData, null, 2)}
 
-Respond in this format only:
+Return ONLY valid JSON.
 
-Summary:
-...
+Format:
 
-Major Issues:
-...
+{
+  "summary": "",
+  "majorIssues": [],
+  "recommendations": []
+}
 
-Recommendations:
-...
+Do not write markdown.
+Do not write explanation.
+Only JSON.
 `;
 
     const response = await ai.models.generateContent({
@@ -37,5 +38,20 @@ Recommendations:
         contents: prompt,
     });
 
-    return response.text;
+   const text = response.text ?? "";
+
+    try {
+
+        return JSON.parse(text);
+
+    } catch {
+
+        return {
+            summary: text,
+            majorIssues: [],
+            recommendations: [],
+        };
+
+    }
+
 };
