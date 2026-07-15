@@ -13,10 +13,14 @@ import { getSeoDetails } from "../scanners/seo.scanner.js";
 import { calculateWebsiteScore } from "../scanners/score.scanner.js";
 import { getIssueSeverity } from "../scanners/severity.scanner.js";
 
+import { generateAIReport } from "../ai/gemini.service.js";
+
 export const scanWebsiteService = async (url: string) => {
 
     const browser = await chromium.launch({
+
         headless: false,
+
     });
 
     const page = await browser.newPage();
@@ -26,42 +30,92 @@ export const scanWebsiteService = async (url: string) => {
     const title = await page.title();
 
     await page.screenshot({
+
         path: "screenshot.png",
+
         fullPage: true,
+
     });
 
+    // Buttons
     const buttonData = await getButtonDetails(page);
 
+    // Links
     const linkData = await getLinkDetails(page);
 
+    // Images
     const imageData = await getImageDetails(page);
 
+    // Inputs
     const inputData = await getInputDetails(page);
 
+    // JavaScript Errors
     const javascriptErrors = await getJavaScriptErrors(page);
 
+    // Console Errors
     const consoleErrors = await getConsoleErrors(page);
 
+    // Network Errors
     const networkErrors = await getNetworkErrors(page);
 
+    // Performance
     const performance = await getPerformanceMetrics(page);
 
+    // Accessibility
     const accessibility = await getAccessibilityDetails(page);
 
+    // SEO
     const seo = await getSeoDetails(page);
 
+    // Score
     const score = calculateWebsiteScore({
+
         consoleErrors,
+
         networkErrors,
+
         javascriptErrors,
+
         accessibility,
+
     });
 
+    // Severity
     const issues = getIssueSeverity({
+
         consoleErrors,
+
         networkErrors,
+
         javascriptErrors,
+
         accessibility,
+
+    });
+
+    // AI Report
+    const aiReport = await generateAIReport({
+
+        title,
+
+        url,
+
+        score,
+
+        issues,
+
+        performance,
+
+        accessibility,
+
+        seo,
+
+        javascriptErrors,
+
+        consoleErrors,
+
+        networkErrors,
+
     });
 
     await browser.close();
@@ -99,6 +153,8 @@ export const scanWebsiteService = async (url: string) => {
         score,
 
         issues,
+
+        aiReport,
 
         screenshot: "screenshot.png",
 
