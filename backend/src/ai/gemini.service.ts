@@ -10,11 +10,11 @@ const ai = new GoogleGenAI({
 export const generateAIReport = async (scanData: any) => {
 
     const prompt = `
-You are a Senior QA Engineer.
+You are a Senior QA Automation Engineer.
 
-Analyze the following website scan report.
+Analyze the following website scan.
 
-Website Scan Report:
+Website Scan:
 
 ${JSON.stringify(scanData, null, 2)}
 
@@ -23,30 +23,31 @@ Return ONLY valid JSON.
 Format:
 
 {
-  "summary":"",
-  "issues":[
-    {
-      "issue":"",
-      "rootCause":"",
-      "priority":"",
-      "fix":""
-    }
-  ],
-  "recommendations":[],
-  "testCases":[
-    {
-      "title":"",
-      "steps":[],
-      "expectedResult":""
-    }
-  ]
+    "summary":"",
+    "issues":[
+        {
+            "issue":"",
+            "rootCause":"",
+            "priority":"",
+            "fix":""
+        }
+    ],
+    "recommendations":[],
+    "testCases":[
+        {
+            "title":"",
+            "steps":[],
+            "expectedResult":""
+        }
+    ],
+    "playwrightScript":""
 }
 
-Generate at least 5 useful test cases.
-
-Do not use markdown.
+Generate Playwright code using JavaScript.
 
 Only return JSON.
+
+No markdown.
 `;
 
     const response = await ai.models.generateContent({
@@ -71,6 +72,8 @@ Only return JSON.
             recommendations: [],
 
             testCases: [],
+
+            playwrightScript: "",
 
         };
 
