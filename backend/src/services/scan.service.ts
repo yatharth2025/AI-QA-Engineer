@@ -31,26 +31,37 @@ export const scanWebsiteService = async (url: string) => {
         fullPage: true,
     });
 
+    // Buttons
     const buttonData = await getButtonDetails(page);
 
+    // Links
     const linkData = await getLinkDetails(page);
 
+    // Images
     const imageData = await getImageDetails(page);
 
+    // Inputs
     const inputData = await getInputDetails(page);
 
+    // JavaScript Errors
     const javascriptErrors = await getJavaScriptErrors(page);
 
+    // Console Errors
     const consoleErrors = await getConsoleErrors(page);
 
+    // Network Errors
     const networkErrors = await getNetworkErrors(page);
 
+    // Performance
     const performance = await getPerformanceMetrics(page);
 
+    // Accessibility
     const accessibility = await getAccessibilityDetails(page);
 
+    // SEO
     const seo = await getSeoDetails(page);
 
+    // Score
     const score = calculateWebsiteScore({
         consoleErrors,
         networkErrors,
@@ -58,6 +69,7 @@ export const scanWebsiteService = async (url: string) => {
         accessibility,
     });
 
+    // Severity
     const issues = getIssueSeverity({
         consoleErrors,
         networkErrors,
@@ -65,6 +77,7 @@ export const scanWebsiteService = async (url: string) => {
         accessibility,
     });
 
+    // AI Report
     const aiReport = await generateAIReport({
 
         title,
