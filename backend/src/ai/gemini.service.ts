@@ -12,9 +12,7 @@ export const generateAIReport = async (scanData: any) => {
     const prompt = `
 You are a Senior QA Automation Engineer.
 
-Analyze the following website scan.
-
-Website Scan:
+Analyze this website scan.
 
 ${JSON.stringify(scanData, null, 2)}
 
@@ -23,31 +21,29 @@ Return ONLY valid JSON.
 Format:
 
 {
-    "summary":"",
-    "issues":[
-        {
-            "issue":"",
-            "rootCause":"",
-            "priority":"",
-            "fix":""
-        }
-    ],
-    "recommendations":[],
-    "testCases":[
-        {
-            "title":"",
-            "steps":[],
-            "expectedResult":""
-        }
-    ],
-    "playwrightScript":""
+  "summary":"",
+  "issues":[
+    {
+      "issue":"",
+      "rootCause":"",
+      "priority":"",
+      "fix":""
+    }
+  ],
+  "recommendations":[],
+  "testCases":[
+    {
+      "title":"",
+      "steps":[],
+      "expectedResult":""
+    }
+  ],
+  "playwrightScript":""
 }
 
-Generate Playwright code using JavaScript.
+Generate a Playwright automation script in JavaScript.
 
 Only return JSON.
-
-No markdown.
 `;
 
     const response = await ai.models.generateContent({
