@@ -12,7 +12,8 @@ import { getAccessibilityDetails } from "../scanners/accessibility.scanner.js";
 import { getSeoDetails } from "../scanners/seo.scanner.js";
 import { calculateWebsiteScore } from "../scanners/score.scanner.js";
 import { getIssueSeverity } from "../scanners/severity.scanner.js";
-import { generateAIReport } from "../ai/gemini.service.js";
+
+import { generateReport } from "../reports/report.service.js";
 
 export const scanWebsiteService = async (url: string) => {
 
@@ -61,7 +62,7 @@ export const scanWebsiteService = async (url: string) => {
     // SEO
     const seo = await getSeoDetails(page);
 
-    // Score
+    // Website Score
     const score = calculateWebsiteScore({
         consoleErrors,
         networkErrors,
@@ -69,7 +70,7 @@ export const scanWebsiteService = async (url: string) => {
         accessibility,
     });
 
-    // Severity
+    // Issue Severity
     const issues = getIssueSeverity({
         consoleErrors,
         networkErrors,
@@ -78,7 +79,7 @@ export const scanWebsiteService = async (url: string) => {
     });
 
     // AI Report
-    const aiReport = await generateAIReport({
+    const aiReport = await generateReport({
 
         title,
 
