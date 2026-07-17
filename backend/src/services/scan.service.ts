@@ -12,7 +12,6 @@ import { getAccessibilityDetails } from "../scanners/accessibility.scanner.js";
 import { getSeoDetails } from "../scanners/seo.scanner.js";
 import { calculateWebsiteScore } from "../scanners/score.scanner.js";
 import { getIssueSeverity } from "../scanners/severity.scanner.js";
-
 import { generateAIReport } from "../ai/gemini.service.js";
 
 export const scanWebsiteService = async (url: string) => {
@@ -87,6 +86,14 @@ export const scanWebsiteService = async (url: string) => {
         consoleErrors,
 
         networkErrors,
+
+        buttons: buttonData,
+
+        links: linkData,
+
+        images: imageData,
+
+        inputs: inputData,
 
     });
 
