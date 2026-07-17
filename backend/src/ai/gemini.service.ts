@@ -23,14 +23,30 @@ Return ONLY valid JSON.
 Format:
 
 {
-  "summary": "",
-  "majorIssues": [],
-  "recommendations": []
+  "summary":"",
+  "issues":[
+    {
+      "issue":"",
+      "rootCause":"",
+      "priority":"",
+      "fix":""
+    }
+  ],
+  "recommendations":[],
+  "testCases":[
+    {
+      "title":"",
+      "steps":[],
+      "expectedResult":""
+    }
+  ]
 }
 
-Do not write markdown.
-Do not write explanation.
-Only JSON.
+Generate at least 5 useful test cases.
+
+Do not use markdown.
+
+Only return JSON.
 `;
 
     const response = await ai.models.generateContent({
@@ -38,7 +54,7 @@ Only JSON.
         contents: prompt,
     });
 
-   const text = response.text ?? "";
+    const text = response.text ?? "";
 
     try {
 
@@ -47,9 +63,15 @@ Only JSON.
     } catch {
 
         return {
+
             summary: text,
-            majorIssues: [],
+
+            issues: [],
+
             recommendations: [],
+
+            testCases: [],
+
         };
 
     }
