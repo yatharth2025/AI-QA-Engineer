@@ -1,63 +1,86 @@
-import StatCard from "../components/StatCard";
+import { useState } from "react";
+import api from "../services/api";
 
 function Dashboard() {
 
-  const stats = [
-    {
-      title: "Total Scans",
-      value: "18",
-      color: "text-blue-600",
-    },
-    {
-      title: "Average Score",
-      value: "91%",
-      color: "text-green-600",
-    },
-    {
-      title: "Bugs Found",
-      value: "34",
-      color: "text-red-600",
-    },
-    {
-      title: "Accessibility",
-      value: "96%",
-      color: "text-purple-600",
-    },
-  ];
+    const [url, setUrl] = useState("");
 
-  return (
-    <div className="p-8">
+    const [result, setResult] = useState(null);
 
-      <h1 className="text-3xl font-bold">
-        Dashboard
-      </h1>
+    const handleScan = async () => {
 
-      <p className="text-gray-500 mt-2">
-        Welcome to AI QA Engineer
-      </p>
+        try {
 
-      <div className="grid grid-cols-4 gap-6 mt-8">
+            const response = await api.post("/api/scan", {
 
-        {stats.map((stat, index) => (
+                url,
 
-          <StatCard
+            });
 
-            key={index}
+            setResult(response.data);
 
-            title={stat.title}
+        }
 
-            value={stat.value}
+        catch (error) {
 
-            color={stat.color}
+            console.log(error);
 
-          />
+        }
 
-        ))}
+    };
 
-      </div>
+    return (
 
-    </div>
-  );
+        <div className="p-8">
+
+            <h1 className="text-3xl font-bold">
+
+                AI QA Engineer
+
+            </h1>
+
+            <div className="mt-8 flex gap-4">
+
+                <input
+
+                    className="border p-3 rounded-lg w-96"
+
+                    placeholder="https://example.com"
+
+                    value={url}
+
+                    onChange={(e) => setUrl(e.target.value)}
+
+                />
+
+                <button
+
+                    onClick={handleScan}
+
+                    className="bg-blue-600 text-white px-6 rounded-lg"
+
+                >
+
+                    Scan
+
+                </button>
+
+            </div>
+
+            {result && (
+
+                <pre className="bg-black text-green-400 mt-8 p-5 rounded-lg overflow-auto">
+
+                    {JSON.stringify(result, null, 2)}
+
+                </pre>
+
+            )}
+
+        </div>
+
+    );
+
 }
 
 export default Dashboard;
