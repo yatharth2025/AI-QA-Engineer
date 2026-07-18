@@ -5,6 +5,6 @@ const app = express();
 
 app.use(express.json());
 
-app.use("/scan", scanRoutes);
+app.use("/api", scanRoutes);
 
 export default app;

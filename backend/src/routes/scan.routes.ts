@@ -3,6 +3,6 @@ import { scanWebsite } from "../controllers/scan.controller.js";
 
 const router = Router();
 
-router.post("/", scanWebsite);
+router.post("/scan", scanWebsite);
 
 export default router;
