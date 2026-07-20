@@ -1,15 +1,28 @@
 import { useState } from "react";
+
 import api from "../services/api";
 
 function Dashboard() {
 
     const [url, setUrl] = useState("");
 
+    const [loading, setLoading] = useState(false);
+
     const [result, setResult] = useState(null);
 
     const handleScan = async () => {
 
+        if (!url) {
+
+            alert("Enter URL");
+
+            return;
+
+        }
+
         try {
+
+            setLoading(true);
 
             const response = await api.post("/api/scan", {
 
@@ -25,6 +38,14 @@ function Dashboard() {
 
             console.log(error);
 
+            alert("Scan Failed");
+
+        }
+
+        finally {
+
+            setLoading(false);
+
         }
 
     };
@@ -39,7 +60,13 @@ function Dashboard() {
 
             </h1>
 
-            <div className="mt-8 flex gap-4">
+            <p className="text-gray-500 mt-2">
+
+                Scan any website using AI.
+
+            </p>
+
+            <div className="flex gap-4 mt-8">
 
                 <input
 
@@ -61,21 +88,47 @@ function Dashboard() {
 
                 >
 
-                    Scan
+                    {
+
+                        loading
+
+                        ?
+
+                        "Scanning..."
+
+                        :
+
+                        "Scan"
+
+                    }
 
                 </button>
 
             </div>
 
-            {result && (
+            {
 
-                <pre className="bg-black text-green-400 mt-8 p-5 rounded-lg overflow-auto">
+                result && (
 
-                    {JSON.stringify(result, null, 2)}
+                    <div className="mt-10">
 
-                </pre>
+                        <h2 className="text-2xl font-bold">
 
-            )}
+                            Scan Result
+
+                        </h2>
+
+                        <pre className="bg-black text-green-400 p-5 rounded-lg mt-4 overflow-auto">
+
+                            {JSON.stringify(result, null, 2)}
+
+                        </pre>
+
+                    </div>
+
+                )
+
+            }
 
         </div>
 
