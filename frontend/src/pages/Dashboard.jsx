@@ -4,6 +4,7 @@ import api from "../services/api";
 
 import ResultCard from "../components/ResultCard";
 import SummaryCard from "../components/SummaryCard";
+import ChartCard from "../components/ChartCard";
 
 function Dashboard() {
 
@@ -43,7 +44,7 @@ function Dashboard() {
 
     return (
 
-        <div className="p-8 bg-gray-100 min-h-screen">
+        <div className="min-h-screen bg-gray-100 p-8">
 
             <h1 className="text-4xl font-bold text-gray-800">
                 AI QA Engineer
@@ -60,7 +61,7 @@ function Dashboard() {
                 <input
                     type="text"
                     placeholder="https://example.com"
-                    className="flex-1 border rounded-lg p-3 bg-white"
+                    className="flex-1 border rounded-lg bg-white p-3"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                 />
@@ -70,9 +71,7 @@ function Dashboard() {
                     disabled={loading}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-8 rounded-lg disabled:bg-gray-400"
                 >
-
                     {loading ? "Scanning..." : "Scan"}
-
                 </button>
 
             </div>
@@ -80,6 +79,8 @@ function Dashboard() {
             {result && (
 
                 <>
+
+                    {/* Scan Result */}
 
                     <div className="mt-10">
 
@@ -93,7 +94,7 @@ function Dashboard() {
 
                     </div>
 
-                    {/* Cards */}
+                    {/* Score Cards */}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
 
@@ -106,8 +107,8 @@ function Dashboard() {
                         <ResultCard
                             title="Performance"
                             value={
-                                result.performance?.status ??
                                 result.performance?.score ??
+                                result.performance?.status ??
                                 "N/A"
                             }
                             color="text-green-600"
@@ -133,6 +134,10 @@ function Dashboard() {
                         />
 
                     </div>
+
+                    {/* Analytics Chart */}
+
+                    <ChartCard result={result} />
 
                     {/* AI Summary */}
 
