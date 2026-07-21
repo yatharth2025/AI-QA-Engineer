@@ -4,7 +4,9 @@ import api from "../services/api";
 
 import ResultCard from "../components/ResultCard";
 import SummaryCard from "../components/SummaryCard";
+import ChartCard from "../components/ChartCard";
 
+import ScreenshotCard from "../components/ScreenshotCard";
 function Dashboard() {
 
     const [url, setUrl] = useState("");

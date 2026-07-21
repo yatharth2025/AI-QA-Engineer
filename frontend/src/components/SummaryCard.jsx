@@ -23,3 +23,14 @@ function SummaryCard({ summary }) {
 }
 
 export default SummaryCard;
+
+
+<ScreenshotCard
+
+screenshot={
+
+result.screenshot
+
+}
+
+/>
