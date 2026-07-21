@@ -1,36 +1,27 @@
 function SummaryCard({ summary }) {
 
-  return (
+    return (
 
-    <div className="bg-white rounded-xl shadow-md p-6 mt-8">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mt-8">
 
-      <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-bold text-gray-800">
 
-        AI Summary
+                🤖 AI Summary
 
-      </h2>
+            </h2>
 
-      <p className="mt-4 text-gray-600 leading-8">
+            <div className="w-20 h-1 bg-blue-600 rounded mt-3 mb-5"></div>
 
-        {summary}
+            <p className="text-gray-600 leading-8 whitespace-pre-line">
 
-      </p>
+                {summary}
 
-    </div>
+            </p>
 
-  );
+        </div>
+
+    );
 
 }
 
 export default SummaryCard;
-
-
-<ScreenshotCard
-
-screenshot={
-
-result.screenshot
-
-}
-
-/>
